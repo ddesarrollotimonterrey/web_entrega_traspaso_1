@@ -11,8 +11,6 @@ $fecha = date('Y-m-d H:i:s');
 $conexionsap = new SAPCON();
 
 switch ($call) {
-
-
     case 'login_et_app':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
