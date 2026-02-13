@@ -4,11 +4,13 @@ ini_set('display_errors', 1);
 header('Access-Control-Allow-Origin: *');
 date_default_timezone_set("America/La_Paz");
 header('Content-Type: application/json; charset=UTF-8');
-
 include "SAPC.php";
 $call = $_GET['nombre'];
 $fecha = date('Y-m-d H:i:s');
 $conexionsap = new SAPCON();
+
+
+
 
 switch ($call) {
     case 'login_et_app':
