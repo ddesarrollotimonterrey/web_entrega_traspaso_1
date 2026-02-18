@@ -711,7 +711,7 @@ switch ($call) {
                             $datat[$ilc]['posi']                                  = $ilc + 1;
                             $datat[$ilc]['campo_select_activado']                 = 1;
                             $datat[$ilc]['U_fecha_actual']                        = '';
-                            $datat[$ilc]['Id_tipoentrega']                        = '1';
+                            $datat[$ilc]['Id_tipoentrega']                        = '3';
                             $datat[$ilc]['Color_id_tipoentrega']                  = '';
                             $datat[$ilc]['Detalle_id_tipoentrega']                = '';
                             $datat[$ilc]['User_despachador']                      = '';
