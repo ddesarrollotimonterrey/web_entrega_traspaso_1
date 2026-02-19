@@ -160,6 +160,9 @@ switch ($call) {
             ];
             $datat = $conexionsap->query("select * from view_lista_meses");
             if (count($datat) > 0) {
+                   foreach ($datat as &$row) {
+        $row['value'] = (int)$row['value'];  // 👈 FORZAR A INT
+    }
                 $otroObjeto = [
                     "Id"      => 0,
                     "Lista"   => $datat,
