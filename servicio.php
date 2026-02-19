@@ -154,7 +154,7 @@ switch ($call) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $otroObjeto = [
                 "Id"      => 0,
-                "Lista"   => $data,
+                "Lista"   => [],
                 "Estado"  => 0,
                 "Mensaje" => "Lista Vacia",
             ];
