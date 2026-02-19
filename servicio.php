@@ -2194,13 +2194,17 @@ switch ($call) {
                 "Estado"  => 0,
                 "Mensaje" => "Sin Datos !!",
             ];
+
+            if (is_array($Almacen)) {
+                $Almacen = implode(',', $Almacen); // 👈 convierte array a string
+            }
             $cant_body = $conexionsap->query("CALL `pa_perfil_inventario`('$f_inicio', '$f_fin', '$Almacen')");
             if (count($cant_body) > 0) {
                 $otroObjeto = [
                     "Id"      => 0,
                     "Lista"   => $cant_body,
                     "Estado"  => 1,
-                    "Mensaje" => "",
+                    "Mensaje" => $Almacen,
                 ];
             }
             echo json_encode($otroObjeto);
