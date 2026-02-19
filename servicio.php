@@ -150,6 +150,28 @@ switch ($call) {
         }
         break;
 
+    case 'lista_meses':
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $otroObjeto = [
+                "Id"      => 0,
+                "Lista"   => $data,
+                "Estado"  => 0,
+                "Mensaje" => "Lista Vacia",
+            ];
+            $datat = $conexionsap->query("select * from view_lista_meses");
+            if (count($datat) > 0) {
+                $otroObjeto = [
+                    "Id"      => 0,
+                    "Lista"   => $datat,
+                    "Estado"  => 1,
+                    "Mensaje" => "",
+                ];
+            }
+            echo json_encode($otroObjeto);
+            return;
+        }
+        break;
+
     case 'informacion_SP_INT_DATA':
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $DocEntry = 'JMAMANI';
