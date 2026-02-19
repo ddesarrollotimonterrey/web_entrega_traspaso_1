@@ -2187,21 +2187,20 @@ switch ($call) {
             $decodedObject = json_decode($data, true);
             $f_inicio      = $decodedObject['f_inicio'] ?? null;
             $f_fin         = $decodedObject['f_fin'] ?? null;
-            $otroObjeto    = [];
-            $cant_body     = $conexionsap->query("CALL `pa_perfil_inventario`('$f_inicio', '$f_fin')");
+            $Almacen       = $decodedObject['Almacen'] ?? null;
+              $otroObjeto = [
+                    "Id"      => 0,
+                    "Lista"   => [],
+                    "Estado"  => 0,
+                    "Mensaje" => "Sin Datos !!",
+                ];
+            $cant_body     = $conexionsap->query("CALL `pa_perfil_inventario`('$f_inicio', '$f_fin', '$Almacen')");
             if (count($cant_body) > 0) {
                 $otroObjeto = [
                     "Id"      => 0,
                     "Lista"   => $cant_body,
                     "Estado"  => 1,
                     "Mensaje" => "",
-                ];
-            } else {
-                $otroObjeto = [
-                    "Id"      => 0,
-                    "Lista"   => [],
-                    "Estado"  => 0,
-                    "Mensaje" => "Sin Datos !!",
                 ];
             }
             echo json_encode($otroObjeto);
