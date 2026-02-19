@@ -160,9 +160,9 @@ switch ($call) {
             ];
             $datat = $conexionsap->query("select * from view_lista_meses");
             if (count($datat) > 0) {
-                   foreach ($datat as &$row) {
-        $row['value'] = (int)$row['value'];  // 👈 FORZAR A INT
-    }
+                foreach ($datat as &$row) {
+                    $row['value'] = (int) $row['value']; // 👈 FORZAR A INT
+                }
                 $otroObjeto = [
                     "Id"      => 0,
                     "Lista"   => $datat,
@@ -2188,13 +2188,13 @@ switch ($call) {
             $f_inicio      = $decodedObject['f_inicio'] ?? null;
             $f_fin         = $decodedObject['f_fin'] ?? null;
             $Almacen       = $decodedObject['Almacen'] ?? null;
-              $otroObjeto = [
-                    "Id"      => 0,
-                    "Lista"   => [],
-                    "Estado"  => 0,
-                    "Mensaje" => "Sin Datos !!",
-                ];
-            $cant_body     = $conexionsap->query("CALL `pa_perfil_inventario`('$f_inicio', '$f_fin', '$Almacen')");
+            $otroObjeto    = [
+                "Id"      => 0,
+                "Lista"   => [],
+                "Estado"  => 0,
+                "Mensaje" => "Sin Datos !!",
+            ];
+            $cant_body = $conexionsap->query("CALL `pa_perfil_inventario`('$f_inicio', '$f_fin', '$Almacen')");
             if (count($cant_body) > 0) {
                 $otroObjeto = [
                     "Id"      => 0,
