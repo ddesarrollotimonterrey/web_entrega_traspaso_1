@@ -96,7 +96,7 @@ switch ($call) {
             if (count($datat) > 0) {
                 $ALMACEN_D = $datat[0]['ALMACEN_D'];
                 if ($ALMACEN_D === $almacen) {
-                    $cant_body = $conexionsap->query("CALL `pa_consulta_por_perfil`('$doc', $perfil, '$balanza')");
+                    $cant_body = $conexionsap->query("CALL `pa_consulta_por_perfil_v2`('$doc', $perfil, '$balanza')");
                     if (count($cant_body) > 0) {
                         $otroObjeto = [
                             "Id"      => 0,
@@ -2135,7 +2135,7 @@ switch ($call) {
 
             $almacen_d  = $decodedObject['almacen_d'] ?? null;
             $otroObjeto = [];
-            $cant_body  = $conexionsap->query("CALL `todos_traspasos_sin_filtro_total`");
+            $cant_body  = $conexionsap->query("CALL `todos_traspasos_sin_filtro_total()`");
             if (count($cant_body) > 0) {
                 $otroObjeto = [
                     "Id"      => 0,
