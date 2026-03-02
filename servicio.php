@@ -2136,23 +2136,26 @@ switch ($call) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $data          = file_get_contents('php://input');
             $decodedObject = json_decode($data, true);
-
-            $almacen_d  = $decodedObject['almacen_d'] ?? null;
-            $otroObjeto = [];
-            $cant_body  = $conexionsap->query("CALL `todos_traspasos_sin_filtro_total()`");
+            $f_inicio      = $decodedObject['f_inicio'] ?? null;
+            $f_fin         = $decodedObject['f_fin'] ?? null;
+            $Almacen       = $decodedObject['Almacen'] ?? null;
+            $otroObjeto    = [
+                "Id"      => 0,
+                "Lista"   => [],
+                "Estado"  => 0,
+                "Mensaje" => "Sin Datos !!",
+            ];
+            $alm='';
+            if (is_array($Almacen)) {
+                $alm = implode(',', $Almacen); // 👈 convierte array a string
+            }
+            $cant_body  = $conexionsap->query("CALL `todos_traspasos_sin_filtro_total`('$f_inicio','$f_fin','$alm')");
             if (count($cant_body) > 0) {
                 $otroObjeto = [
                     "Id"      => 0,
                     "Lista"   => $cant_body,
                     "Estado"  => 1,
                     "Mensaje" => "",
-                ];
-            } else {
-                $otroObjeto = [
-                    "Id"      => 0,
-                    "Lista"   => [],
-                    "Estado"  => 0,
-                    "Mensaje" => "Sin Datos !!",
                 ];
             }
             echo json_encode($otroObjeto);
