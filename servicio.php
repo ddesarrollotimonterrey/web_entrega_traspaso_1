@@ -1416,6 +1416,7 @@ switch ($call) {
                 'item_array',
                 'existen_items_nocompletados',
                 'tipo_usuario',
+                'lugar'
             ];
 
             foreach ($required as $campo) {
@@ -1512,11 +1513,14 @@ switch ($call) {
                 }
             }
 
-            if ($existen_items_nocompletados === 0 && in_array($tipo_usuario, [2, 6])) {
+            // if (($existen_items_nocompletados === 0 && in_array($tipo_usuario, [2, 6]))   ||   ( in_array($lugar, [1, 3]) && in_array($tipo_usuario, [2, 6]))) {
+            //     $id_lugar = 3;
+            //     $conexionsap->query("update log_app_traspasos SET Fecha_Fin='$fecha' , Id_lugar=$id_lugar WHERE Id=$idInsert");
+            // }
+ if (  ( in_array($lugar, [1, 3]) && in_array($tipo_usuario, [2, 6]))) {
                 $id_lugar = 3;
                 $conexionsap->query("update log_app_traspasos SET Fecha_Fin='$fecha' , Id_lugar=$id_lugar WHERE Id=$idInsert");
             }
-
             echo json_encode([
                 "Estado"  => 1,
                 "Mensaje" => "Registrado correctamente",
