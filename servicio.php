@@ -176,6 +176,35 @@ switch ($call) {
         }
         break;
 
+
+
+
+ case 'lista_opciones_app':
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $otroObjeto = [
+                "Id"      => 0,
+                "Lista"   => [],
+                "Estado"  => 0,
+                "Mensaje" => "Lista Vacia",
+            ];
+            $datat = $conexionsap->query("select * from lista_opcion_app cc where cc.Estado=1 order by cc.Id asc");
+            if (count($datat) > 0) {
+                foreach ($datat as &$row) {
+                    $row['id'] = (int) $row['id']; // 👈 FORZAR A INT
+                }
+                $otroObjeto = [
+                    "Id"      => 0,
+                    "Lista"   => $datat,
+                    "Estado"  => 1,
+                    "Mensaje" => "",
+                ];
+            }
+            echo json_encode($otroObjeto);
+            return;
+        }
+        break;
+
+
     case 'informacion_SP_INT_DATA':
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $DocEntry = 'JMAMANI';
