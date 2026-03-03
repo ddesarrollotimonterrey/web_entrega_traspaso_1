@@ -14,8 +14,8 @@ class SAPCON
     public $DB_NAME_qrr = 'entrega_db';
     public $DB_NAME_importaciones = 'importaciones';
     public $mainUrl     = 'https://sapb1:50000/b1s/v2/';
-  //  public $server_db   = 'SBO_MONTERREY';
-        public $server_db   = 'TEST_MONTERREY';
+    public $server_db   = 'SBO_MONTERREY';
+   //     public $server_db   = 'TEST_MONTERREY';
     public $url_archivo = 'http://app-web-mty/archivo_promotores/';
 
     public function getArray($odbc_result)
