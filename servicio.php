@@ -35,6 +35,7 @@ switch ($call) {
             if (isset($data_arrayy['SessionId'])) {
                 $datat = $conexionsap->hanacall("\"SP_INT_DATA\"('$user')");
                 if (count($datat) > 0) {
+                    $datat[0]['TIPOENTREGA'] = "1";
                     $datat[0]['SessionId'] = $data_arrayy['SessionId'];
                     if ($canal === 'movil' && in_array($datat[0]['TIPOENTREGA'], [1, 2])) {
                         $accesoPermitido = true;
