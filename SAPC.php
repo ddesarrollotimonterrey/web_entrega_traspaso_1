@@ -265,6 +265,7 @@ class SAPCON
         $res     = $this->hanacall("\"SBO_NOTA_EMAIL\"('$nota')");
         for ($ieh = 0; $ieh < count($res); $ieh++) {
             $Email         = $res[$ieh]['EMail'];
+            
                $Email         = 'jflores@monterreysrl.com.bo';
             $NombreUsuario = $res[$ieh]['Usuario'];
             if ($this->is_valid_email($Email)) {
