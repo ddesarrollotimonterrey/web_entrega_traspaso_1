@@ -752,6 +752,79 @@ switch ($call) {
         }
         break;
 
+   case 'find_orden_carga':
+      if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $data=file_get_contents('php://input');
+        $decodedObject = json_decode($data, true);
+        $U_tipo_documento=$decodedObject['U_tipo_documento']; 
+        $U_n_documento=$decodedObject['U_n_documento']; 
+        $otroObjeto=[];
+        $datat=[]; 
+        if (is_numeric($U_n_documento)) {
+
+          if (strlen($U_n_documento) === 9) {
+
+          $datat=[]; 
+          $datat=  $conexionsap->hanacall("SP_ENT_MAIN$U_tipo_documento($U_n_documento)");
+          if(count($datat)>0){
+            for($ilc=0; $ilc<count($datat); $ilc++){
+              $codigo_items= $datat[$ilc]['CODIGO_ITEM'];
+              $textoABuscar = "SRV";
+              $datat[$ilc]['posi']=$ilc+1;
+              $datat[$ilc]['Id_tipoentrega']='1';
+              $datat[$ilc]['User_despachador']='';
+              $datat[$ilc]['Nombre_despachador']='';
+              if (strpos($codigo_items, $textoABuscar) !== false) {
+                $datat[$ilc]['campo_select']='1';
+                $datat[$ilc]['campo_select_color']='2px solid red';
+                $datat[$ilc]['es_servicio']='1';
+              } else {
+                $datat[$ilc]['campo_select']='0';
+                $datat[$ilc]['campo_select_color']='';
+                $datat[$ilc]['es_servicio']='0';
+              }
+            }
+            $otroObjeto = [
+              "Id"=> 0,
+              "Lista"=> json_encode($datat),
+              "Estado" => 1,
+              "Mensaje" => ""
+            ];
+          }else{
+            $otroObjeto = [
+              "Id"=> 0,
+              "Lista"=> json_encode($datat),
+              "Estado" => 0,
+              "Mensaje" => "El documento no exite o no es un documento comercial !!!"
+            ];
+          }
+
+          }else{
+            $otroObjeto = [
+              "Id"=> 0,
+              "Lista"=> json_encode($datat),
+              "Estado" => 0,
+              "Mensaje" => "El valor no tiene exactamente 9 dígitos. 6 "
+            ];
+          }
+
+        } else {
+          $otroObjeto = [
+            "Id"=> 0,
+            "Lista"=> json_encode($datat),
+            "Estado" => 0,
+            "Mensaje" => "El valor no es un número."
+          ];
+        }
+
+      
+        echo json_encode($otroObjeto);
+        return;
+      }
+    break;
+  
+
+
     case 'find':
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $data = file_get_contents('php://input');
