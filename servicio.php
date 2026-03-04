@@ -35,7 +35,7 @@ switch ($call) {
             if (isset($data_arrayy['SessionId'])) {
                 $datat = $conexionsap->hanacall("\"SP_INT_DATA\"('$user')");
                 if (count($datat) > 0) {
-                    $datat[0]['TIPOENTREGA'] = "1";
+                   // $datat[0]['TIPOENTREGA'] = "1";
                     $datat[0]['SessionId'] = $data_arrayy['SessionId'];
                     $datat_canal = $conexionsap->query("select * from lista_opcion_app cc where cc.Estado=1 order by cc.Id asc");
                     if (count($datat_canal) > 0) {
