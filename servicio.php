@@ -1926,7 +1926,7 @@ switch ($call) {
                                         "Id" => 4,
                                         "Lista" => [],
                                         "Estado" => 0,
-                                        "Mensaje" => "Nose pudo enviar el correo pero se realizo la transcacción correctamente !!!!",
+                                        "Mensaje" => "Nose pudo enviar el correo pero se realizo la transcacción correctamente e !!!!",
                                     ];
                                 }
                             }
