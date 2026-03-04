@@ -1446,7 +1446,19 @@ switch ($call) {
 
                                    $otroObjeto = [
                                             "Id" => 0,
-                                            "Lista" => json_encode($cant_body),
+                                            "Lista" => json_encode([
+                                                "U_n_documento" => $U_n_documento,
+                                                "U_tipo_documento" => $U_tipo_documento,
+                                                "date" => $date,
+                                                "hora" => $hora,
+                                                "person" => $person,
+                                                "posi1l" => $posi1l,
+                                                "posi2l" => $posi2l,
+                                                "RAMA" => $RAMA,
+                                                "SUCURSAL" => $SUCURSAL,
+                                                "item_array" => $item_array,
+                                                "logArray" => $item_array
+                                            ]),
                                             "Estado" => 1,
                                             "Mensaje" => "Registrado Correctamente !!!",
                                         ];
