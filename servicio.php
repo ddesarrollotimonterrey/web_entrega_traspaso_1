@@ -1187,7 +1187,8 @@ switch ($call) {
             $item_array = json_encode($decodedObject['item_array']);
             $endData = json_encode($decodedObject['endData']);
             $item_array_1 = $decodedObject['item_array'];
-
+            $date=date('Y-m-d');
+            $hora=date('H:i:s');
             if (count($item_array_1) > 0) {
                 for ($ilcg = 0; $ilcg < count($item_array_1); $ilcg++) {
                     $Id_tipoentrega_ = $item_array_1[$ilcg]['Id_tipoentrega'];
