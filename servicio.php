@@ -36,39 +36,45 @@ switch ($call) {
                 $datat = $conexionsap->hanacall("\"SP_INT_DATA\"('$user')");
                 if (count($datat) > 0) {
                    // $datat[0]['TIPOENTREGA'] = "1";
-                    $datat[0]['SessionId'] = $data_arrayy['SessionId'];
-                    $datat_canal = $conexionsap->query("select * from lista_opcion_app cc where cc.Estado=1 order by cc.Id asc");
-                    if (count($datat_canal) > 0) {
-                        foreach ($datat_canal as &$row) {
-                            $row['id'] = (int) $row['id']; // 👈 FORZAR A INT
-                        }
-                        $datat[0]['canal'] = $datat_canal;
-                          if ($canal === 'movil' && in_array($datat[0]['TIPOENTREGA'], [1, 2])) {
-                        $accesoPermitido = true;
-                    }
-                    if ($canal === 'web' && in_array($datat[0]['TIPOENTREGA'], [3, 4, 5])) {
-                        $accesoPermitido = true;
-                    }
-                    if (!$accesoPermitido) {
-                        $otroObjeto = [
+
+
+ $otroObjeto = [
                             "Id" => 0,
                             "Lista" => $datat,
                             "Estado" => 0,
                             "Mensaje" => "Acceso denegado. No tiene permisos para ingresar al sistema.",
                         ];
-                    } else {
-                        $otroObjeto = [
-                            "Id" => 0,
-                            "Lista" => $datat,
-                            "Estado" => 1,
-                            "Mensaje" => "Bienvenid@, " . $datat[0]['PROPIETARIO'],
-                        ];
-                    }
-                    }
 
 
-
-                  
+                    // $datat[0]['SessionId'] = $data_arrayy['SessionId'];
+                    // $datat_canal = $conexionsap->query("select * from lista_opcion_app cc where cc.Estado=1 order by cc.Id asc");
+                    // if (count($datat_canal) > 0) {
+                    //     foreach ($datat_canal as &$row) {
+                    //         $row['id'] = (int) $row['id']; // 👈 FORZAR A INT
+                    //     }
+                    //     $datat[0]['canal'] = $datat_canal;
+                    //       if ($canal === 'movil' && in_array($datat[0]['TIPOENTREGA'], [1, 2])) {
+                    //     $accesoPermitido = true;
+                    // }
+                    // if ($canal === 'web' && in_array($datat[0]['TIPOENTREGA'], [3, 4, 5])) {
+                    //     $accesoPermitido = true;
+                    // }
+                    // if (!$accesoPermitido) {
+                    //     $otroObjeto = [
+                    //         "Id" => 0,
+                    //         "Lista" => $datat,
+                    //         "Estado" => 0,
+                    //         "Mensaje" => "Acceso denegado. No tiene permisos para ingresar al sistema.",
+                    //     ];
+                    // } else {
+                    //     $otroObjeto = [
+                    //         "Id" => 0,
+                    //         "Lista" => $datat,
+                    //         "Estado" => 1,
+                    //         "Mensaje" => "Bienvenid@, " . $datat[0]['PROPIETARIO'],
+                    //     ];
+                    // }
+                    // }
                 }
             } elseif (isset($data_arrayy['error'])) {
                 $otroObjeto = [
