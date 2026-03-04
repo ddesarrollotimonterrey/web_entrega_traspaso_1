@@ -16,7 +16,6 @@ class SAPCON
     public $mainUrl     = 'https://sapb1:50000/b1s/v2/';
     public $server_db   = 'SBO_MONTERREY';
    //     public $server_db   = 'TEST_MONTERREY';
-    public $url_archivo = 'http://app-web-mty/archivo_promotores/';
 
     public function getArray($odbc_result)
     {
