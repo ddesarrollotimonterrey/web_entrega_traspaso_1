@@ -1445,43 +1445,43 @@ switch ($call) {
                       VALUES ('$U_n_documento', '$U_tipo_documento', '$fecha','$person',$posi1l,$posi2l, '$despachador','$RAMA','$SUCURSAL','$item_array','$item_array');");
                                 if ($cant_body_i > 0) {
 
-                                   $otroObjeto = [
+                                //    $otroObjeto = [
+                                //             "Id" => 0,
+                                //             "Lista" => json_encode([
+                                //                 "U_n_documento" => $U_n_documento,
+                                //                 "U_tipo_documento" => $U_tipo_documento,
+                                //                 "date" => $date,
+                                //                 "hora" => $hora,
+                                //                 "person" => $person,
+                                //                 "posi1l" => $posi1l,
+                                //                 "posi2l" => $posi2l,
+                                //                 "RAMA" => $RAMA,
+                                //                 "SUCURSAL" => $SUCURSAL,
+                                //                 "item_array" => $item_array,
+                                //                 "logArray" => $item_array
+                                //             ]),
+                                //             "Estado" => 1,
+                                //             "Mensaje" => "Registrado Correctamente !!!",
+                                //         ];
+
+                                    $json = $conexionsap->hanacall("SBO_ENTREGAS_TRACKING('$U_n_documento',$U_tipo_documento,'$date', '$hora','$person',$posi1l,$posi2l,'$RAMA', '$SUCURSAL','$item_array','$item_array','')");
+                                    $resultado = $json[0]['Resultado'];
+
+                                    if ($resultado == 1) {
+                                        $otroObjeto = [
                                             "Id" => 0,
-                                            "Lista" => json_encode([
-                                                "U_n_documento" => $U_n_documento,
-                                                "U_tipo_documento" => $U_tipo_documento,
-                                                "date" => $date,
-                                                "hora" => $hora,
-                                                "person" => $person,
-                                                "posi1l" => $posi1l,
-                                                "posi2l" => $posi2l,
-                                                "RAMA" => $RAMA,
-                                                "SUCURSAL" => $SUCURSAL,
-                                                "item_array" => $item_array,
-                                                "logArray" => $item_array
-                                            ]),
+                                            "Lista" => json_encode($cant_body),
                                             "Estado" => 1,
                                             "Mensaje" => "Registrado Correctamente !!!",
                                         ];
-
-                                    // $json = $conexionsap->hanacall("SBO_ENTREGAS_TRACKING('$U_n_documento',$U_tipo_documento,'$date', '$hora','$person',$posi1l,$posi2l,'$RAMA', '$SUCURSAL','$item_array','$item_array','')");
-                                    // $resultado = $json[0]['Resultado'];
-
-                                    // if ($resultado == 1) {
-                                    //     $otroObjeto = [
-                                    //         "Id" => 0,
-                                    //         "Lista" => json_encode($cant_body),
-                                    //         "Estado" => 1,
-                                    //         "Mensaje" => "Registrado Correctamente !!!",
-                                    //     ];
-                                    // } else {
-                                    //     $otroObjeto = [
-                                    //         "Id" => 5,
-                                    //         "Lista" => [],
-                                    //         "Estado" => 0,
-                                    //         "Mensaje" => "Nose pudo registrar el traking en SAP,  pero se realizo la transcacción correctamente !!!!",
-                                    //     ];
-                                    // }
+                                    } else {
+                                        $otroObjeto = [
+                                            "Id" => 5,
+                                            "Lista" => [],
+                                            "Estado" => 0,
+                                            "Mensaje" => "Nose pudo registrar el traking en SAP,  pero se realizo la transcacción correctamente !!!!",
+                                        ];
+                                    }
                                 }
                             } else {
                                 $otroObjeto = [
