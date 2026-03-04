@@ -265,18 +265,19 @@ class SAPCON
         $res     = $this->hanacall("\"SBO_NOTA_EMAIL\"('$nota')");
         for ($ieh = 0; $ieh < count($res); $ieh++) {
             $Email         = $res[$ieh]['EMail'];
+               $Email         = 'jflores@monterreysrl.com.bo';
             $NombreUsuario = $res[$ieh]['Usuario'];
             if ($this->is_valid_email($Email)) {
                 $mail = new PHPMailer;
                 $mail->IsSMTP();
                 $mail->CharSet    = 'UTF-8';
                 $mail->Encoding   = 'base64'; //Sets Mailer to send message using SMTP
-                $mail->Host       = 'mail.monterreysrl.com.bo';
+                $mail->Host       = 'smtp.office365.com';
                 $mail->Port       = 587;                              //Sets the default SMTP server port
                 $mail->SMTPAuth   = true;                             //Sets SMTP authentication.
                 $mail->Username   = 'soportetic@monterreysrl.com.bo'; //Sets SMTP username
-                $mail->Password   = 'sssTTT765';                      //Sets SMTP password
-                $mail->SMTPSecure = '';                               //Sets connection prefix. Options are "", "ssl" or "tls"
+                $mail->Password   = 'K(120040947319oz';                      //Sets SMTP password
+                $mail->SMTPSecure = 'tls';                               //Sets connection prefix. Options are "", "ssl" or "tls"
                 $mail->From       = 'soportetic@monterreysrl.com.bo'; //Sets the From email address for the message
                 $mail->FromName   = 'Detalle Nota - ' . $nota;        //Sets the From name of the message
                 $mail->AddAddress($Email, $NombreUsuario);            //Adds a "To" address
