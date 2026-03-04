@@ -1694,7 +1694,8 @@ switch ($call) {
             $endData = json_encode($decodedObject['endData']);
             $cantidad_total = $decodedObject['cantidad_total'];
             $item_array = json_encode($decodedObject['item_array']);
-
+            $date=date('Y-m-d');
+            $hora=date('H:i:s');
             $otroObjeto = [];
             $vali_rsap = 1;
             $vali_port = 1;
@@ -1791,22 +1792,22 @@ switch ($call) {
                         "U_device" => 'Movil',
                     ];
 
-                    $url = $conexionsap->mainUrl . 'U_PORTERIA';
-                    $res1 = $conexionsap->callApis_sap('POST', $url, $newPorteria, $idSesion);
-                    $res1 = json_decode($res1, true);
-                    if (isset($res1['error'])) {
-                        $vali_port = 0;
-                        $otroObjeto = [
-                            "Id" => 3,
-                            "Lista" => [],
-                            "Estado" => 0,
-                            "Mensaje" => $res1['error'],
-                        ];
-                        echo json_encode($otroObjeto);
-                        return;
-                    }
+                    // $url = $conexionsap->mainUrl . 'U_PORTERIA';
+                    // $res1 = $conexionsap->callApis_sap('POST', $url, $newPorteria, $idSesion);
+                    // $res1 = json_decode($res1, true);
+                    // if (isset($res1['error'])) {
+                    //     $vali_port = 0;
+                    //     $otroObjeto = [
+                    //         "Id" => 3,
+                    //         "Lista" => [],
+                    //         "Estado" => 0,
+                    //         "Mensaje" => $res1['error'],
+                    //     ];
+                    //     echo json_encode($otroObjeto);
+                    //     return;
+                    // }
 
-                    if ($vali_port == 1) {
+                   // if ($vali_port == 1) {
                         $JSON_PORTERIA_SAPP = json_encode($newPorteria);
                         $cant_body = $conexionsap->query("insert INTO log_app_entrega_porteria (U_n_documento, U_tipo_documento, appVersion,despachador,CODI,RAMA,SUCURSAL,TIPO,OWNER, CODEV,MEMO,person,FechaRegistro,endData, ult_endData,JSON_PORTERIA_SAP, cantidad_total,logArray) VALUES ('$U_n_documento', '$U_tipo_documento', '$appVersion','$despachador', '$CODI','$RAMA','$SUCURSAL','$TIPO','$OWNER','$CODEV','$MEMO','$person','$fecha','$endData','$mergedJson','$JSON_PORTERIA_SAPP', $cantidad_total, '$item_array');");
                         if ($cant_body > 0) {
@@ -1846,24 +1847,31 @@ switch ($call) {
                                                     $cant_body_i = $conexionsap->query("insert INTO log_proceso (U_n_documento, U_tipo_documento,FechaRegistro,Usuario, Posicion, PosicionXFecha, despachador,RAMA,SUCURSAL,item_array, logArray,EnvioCorreo)  VALUES ('$U_n_documento', '$U_tipo_documento', '$fecha','$person',3,3, '$despachador','$RAMA','$SUCURSAL','$JSON_PORTERIA_SAPP','$JSON_PORTERIA_SAPP','$result');");
                                                     if ($cant_body_i > 0) {
 
-                                                        $json = $conexionsap->hanacall("SBO_ENTREGAS_TRACKING('$U_n_documento',$U_tipo_documento,'$date', '$hora','$person',3,3,'$RAMA', '$SUCURSAL','$JSON_PORTERIA_SAPP','$JSON_PORTERIA_SAPP','$result')");
-                                                        $resultado = $json[0]['Resultado'];
-
-                                                        if ($resultado == 1) {
                                                             $otroObjeto = [
                                                                 "Id" => 0,
                                                                 "Lista" => json_encode($cant_body),
                                                                 "Estado" => 1,
                                                                 "Mensaje" => "Registrado Correctamente !!!",
                                                             ];
-                                                        } else {
-                                                            $otroObjeto = [
-                                                                "Id" => 5,
-                                                                "Lista" => [],
-                                                                "Estado" => 0,
-                                                                "Mensaje" => "Nose pudo registrar el traking en SAP,  pero se realizo la transcacción correctamente !!!!",
-                                                            ];
-                                                        }
+
+                                                        // $json = $conexionsap->hanacall("SBO_ENTREGAS_TRACKING('$U_n_documento',$U_tipo_documento,'$date', '$hora','$person',3,3,'$RAMA', '$SUCURSAL','$JSON_PORTERIA_SAPP','$JSON_PORTERIA_SAPP','$result')");
+                                                        // $resultado = $json[0]['Resultado'];
+
+                                                        // if ($resultado == 1) {
+                                                        //     $otroObjeto = [
+                                                        //         "Id" => 0,
+                                                        //         "Lista" => json_encode($cant_body),
+                                                        //         "Estado" => 1,
+                                                        //         "Mensaje" => "Registrado Correctamente !!!",
+                                                        //     ];
+                                                        // } else {
+                                                        //     $otroObjeto = [
+                                                        //         "Id" => 5,
+                                                        //         "Lista" => [],
+                                                        //         "Estado" => 0,
+                                                        //         "Mensaje" => "Nose pudo registrar el traking en SAP,  pero se realizo la transcacción correctamente !!!!",
+                                                        //     ];
+                                                        // }
                                                     }
                                                 } else {
                                                     $otroObjeto = [
@@ -1886,24 +1894,31 @@ switch ($call) {
                                     $cant_body_i = $conexionsap->query("insert INTO log_proceso (U_n_documento, U_tipo_documento,FechaRegistro,Usuario, Posicion, PosicionXFecha, despachador,RAMA,SUCURSAL,item_array, logArray,EnvioCorreo)  VALUES ('$U_n_documento', '$U_tipo_documento', '$fecha','$person',3,3, '$despachador','$RAMA','$SUCURSAL','$JSON_PORTERIA_SAPP','$JSON_PORTERIA_SAPP','$result');");
                                     if ($cant_body_i > 0) {
 
-                                        $json = $conexionsap->hanacall("SBO_ENTREGAS_TRACKING('$U_n_documento',$U_tipo_documento,'$date', '$hora','$person',3,3,'$RAMA', '$SUCURSAL','$JSON_PORTERIA_SAPP','$JSON_PORTERIA_SAPP','$result')");
-                                        $resultado = $json[0]['Resultado'];
 
-                                        if ($resultado == 1) {
                                             $otroObjeto = [
                                                 "Id" => 0,
                                                 "Lista" => json_encode($cant_body),
                                                 "Estado" => 1,
                                                 "Mensaje" => "Registrado Correctamente !!!",
                                             ];
-                                        } else {
-                                            $otroObjeto = [
-                                                "Id" => 5,
-                                                "Lista" => [],
-                                                "Estado" => 0,
-                                                "Mensaje" => "Nose pudo registrar el traking en SAP,  pero se realizo la transcacción correctamente !!!!",
-                                            ];
-                                        }
+                                        // $json = $conexionsap->hanacall("SBO_ENTREGAS_TRACKING('$U_n_documento',$U_tipo_documento,'$date', '$hora','$person',3,3,'$RAMA', '$SUCURSAL','$JSON_PORTERIA_SAPP','$JSON_PORTERIA_SAPP','$result')");
+                                        // $resultado = $json[0]['Resultado'];
+
+                                        // if ($resultado == 1) {
+                                        //     $otroObjeto = [
+                                        //         "Id" => 0,
+                                        //         "Lista" => json_encode($cant_body),
+                                        //         "Estado" => 1,
+                                        //         "Mensaje" => "Registrado Correctamente !!!",
+                                        //     ];
+                                        // } else {
+                                        //     $otroObjeto = [
+                                        //         "Id" => 5,
+                                        //         "Lista" => [],
+                                        //         "Estado" => 0,
+                                        //         "Mensaje" => "Nose pudo registrar el traking en SAP,  pero se realizo la transcacción correctamente !!!!",
+                                        //     ];
+                                        // }
                                     }
                                 } else {
                                     $otroObjeto = [
@@ -1922,7 +1937,7 @@ switch ($call) {
                                 "Mensaje" => "Error de Registro",
                             ];
                         }
-                    }
+                  //  }
                 }
             } else {
                 if (isset($data_arrayy['error'])) {
@@ -1939,6 +1954,11 @@ switch ($call) {
             return;
         }
         break;
+
+
+
+
+
 
     case 'getTicket':
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
