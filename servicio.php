@@ -1696,6 +1696,7 @@ switch ($call) {
             $item_array = json_encode($decodedObject['item_array']);
             $date=date('Y-m-d');
             $hora=date('H:i:s');
+            $horaa=date('H:i');
             $otroObjeto = [];
             $vali_rsap = 1;
             $vali_port = 1;
