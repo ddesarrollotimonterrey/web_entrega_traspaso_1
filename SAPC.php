@@ -112,7 +112,7 @@ class SAPCON
                 "Id"      => 0,
                 "Lista"   => json_encode([]),
                 "Estado"  => 0,
-                "Mensaje" => "El valor no es un número."
+                "Mensaje" => "El valor no es un número 1."
             ]);
         }
         if (strlen($n_documento) !== 9) {
@@ -169,7 +169,7 @@ class SAPCON
                 "Id"      => 0,
                 "Lista"   => json_encode([]),
                 "Estado"  => 0,
-                "Mensaje" => "El valor no es un número."
+                "Mensaje" => "El valor no es un número 2."
             ]);
         }
         if (strlen($n_documento) !== 9) {
@@ -215,7 +215,7 @@ class SAPCON
                 "Id"      => 0,
                 "Lista"   => json_encode([]),
                 "Estado"  => 0,
-                "Mensaje" => "El valor no es un número."
+                "Mensaje" => "El valor no es un número 3."
             ]);
         }
         if (strlen($n_documento) !== 9) {

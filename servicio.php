@@ -571,7 +571,7 @@ switch ($call) {
                     "Id" => 0,
                     "Lista" => json_encode($datat),
                     "Estado" => 0,
-                    "Mensaje" => "El valor no es un número.",
+                    "Mensaje" => "El valor no es un número 4.",
                 ];
             }
 
@@ -624,7 +624,7 @@ switch ($call) {
                     "Id" => 0,
                     "Lista" => json_encode($datat),
                     "Estado" => 0,
-                    "Mensaje" => "El valor no es un número.",
+                    "Mensaje" => "El valor no es un número 5.",
                 ];
             }
 
@@ -675,7 +675,7 @@ switch ($call) {
                     "Id" => 0,
                     "Lista" => json_encode($datat),
                     "Estado" => 0,
-                    "Mensaje" => "El valor no es un número.",
+                    "Mensaje" => "El valor no es un número 6.",
                 ];
             }
 
@@ -743,7 +743,7 @@ switch ($call) {
                     "Id" => 0,
                     "Lista" => ($datat),
                     "Estado" => 0,
-                    "Mensaje" => "El valor no es un número.",
+                    "Mensaje" => "El valor no es un número 7.",
                 ];
             }
 
@@ -899,7 +899,7 @@ switch ($call) {
                     "Id" => 0,
                     "Lista" => json_encode($datat),
                     "Estado" => 0,
-                    "Mensaje" => "El valor no es un número.",
+                    "Mensaje" => "El valor no es un número 8.",
                 ];
             }
 
@@ -2373,7 +2373,7 @@ switch ($call) {
                     "Id" => 0,
                     "Lista" => json_encode($datat),
                     "Estado" => 0,
-                    "Mensaje" => "El valor no es un número.",
+                    "Mensaje" => "El valor no es un número 9.",
                 ];
             }
 
