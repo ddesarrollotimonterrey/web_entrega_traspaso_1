@@ -813,7 +813,7 @@ switch ($call) {
             "Id"=> 0,
             "Lista"=> json_encode($datat),
             "Estado" => 0,
-            "Mensaje" => "El valor no es un número."
+            "Mensaje" => "El valor no es un número." ." ".  is_numeric($U_n_documento)." ". $U_n_documento
           ];
         }
 
