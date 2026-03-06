@@ -1520,28 +1520,19 @@ switch ($call) {
         
 
     case 'registrar_informacion_n_nota_traspaso':
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            echo json_encode(["Estado" => 0, "Mensaje" => "Método no permitido"]);
-            return;
-        }
-
         try {
-
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {  throw new Exception("Método no permitido"); }
+            $fecha = date('Y-m-d H:i:s');
+            $fecha_inicio = '';
+            $id_lugar = 2;
             $data = file_get_contents('php://input');
             $decoded = json_decode($data, true);
-
-            if (!$decoded) {
-                throw new Exception("JSON inválido");
-            }
-
-            // =========================
-            // Validación de campos obligatorios
-            // =========================
+            if (!$decoded) {  throw new Exception("JSON inválido"); }
             $required = [
                 'U_n_documento',
                 'U_tipo_documento',
                 'appVersion',
+                'appVersion1',
                 'despachador',
                 'CODI',
                 'RAMA',
@@ -1557,117 +1548,69 @@ switch ($call) {
                 'tipo_usuario',
                 'lugar'
             ];
-
-            foreach ($required as $campo) {
-                if (!isset($decoded[$campo])) {
-                    throw new Exception("Falta el campo: $campo");
-                }
-            }
-
-            $fecha = date('Y-m-d H:i:s');
-
             extract($decoded);
-
             $itemsModificados = $decoded['itemsModificados'] ?? [];
             $item_array_1 = $decoded['item_array'];
-
             $appVersion = $decoded['appVersion'];
             $appVersion1 = $decoded['appVersion1'];
-            if (!is_array($item_array_1) || count($item_array_1) === 0) {
-                throw new Exception("No existen ítems para registrar");
-            }
-
-            // =========================
-            // Marcar fecha por ítems modificados
-            // =========================
             $fecha_primero = $item_array_1[0]['FECHA'] ?? null;
             if (!empty($itemsModificados)) {
                 foreach ($item_array_1 as &$item) {
-                    if (
-                        isset($item['CODIGO_ITEM']) &&
-                        in_array($item['CODIGO_ITEM'], $itemsModificados)
-                    ) {
+                    if ( isset($item['CODIGO_ITEM']) &&  in_array($item['CODIGO_ITEM'], $itemsModificados) ) {
                         $item['U_fecha_registro_x_items'] = $fecha;
                     }
                 }
                 unset($item);
             }
-
             $item_array_json = json_encode($item_array_1, JSON_UNESCAPED_UNICODE);
             $item_array_json_version = json_encode($appVersion, JSON_UNESCAPED_UNICODE);
             $item_array_json_version1 = json_encode($appVersion1, JSON_UNESCAPED_UNICODE);
-
             $url = $conexionsap->mainUrl . 'Login';
-            $login = $conexionsap->callApis_sap(
-                'POST',
-                $url,
-                [
-                    "UserName" => $person,
-                    "Password" => $pase,
-                    "CompanyDB" => $conexionsap->server_db,
-                ],
-                null
-            );
-
+            $login = $conexionsap->callApis_sap('POST', $url,["UserName" => $person, "Password" => $pase,"CompanyDB" => $conexionsap->server_db],null);
             $loginResp = json_decode($login, true);
-
             if (!isset($loginResp['SessionId'])) {
                 throw new Exception($loginResp['error'] ?? 'Error login SAP');
             }
-
-            // =========================
-            // VALIDAR EXISTENCIA DOCUMENTO
-            // =========================
-            $fecha_inicio = '';
-            $id_lugar = 2;
-            $existe = $conexionsap->query("CALL EXISTE_DOCUMENTO_TRASPASO('$U_n_documento')");
-            if (count($existe) === 0) {
-                $fecha_inicio = $fecha;
-                $id_lugar = 1;
+            $result1 = $conexionsap->query("CALL EXISTE_DOCUMENTO_TRASPASO('$U_n_documento')");
+            if (!$result1) {
+                throw new Exception("Error CALL EXISTE_DOCUMENTO_TRASPASO");
             }
-
-            // =========================
-            // INSERT LOG
-            // =========================
-
-            $insert = "
-       insert into log_app_traspasos
-        (U_n_documento,U_tipo_documento,appVersion,aux_array,despachador,CODI,RAMA,SUCURSAL,TIPO,OWNER,CODEV,MEMO,person,item_array,FechaRegistro,Fecha_Inicio,existen_items_nocompletados,Tipo_usuario,Id_lugar,FechaRegistroSAP)
-        VALUES
-        ('$U_n_documento','$U_tipo_documento','$item_array_json_version','$item_array_json_version1','$despachador','$CODI','$RAMA','$SUCURSAL','$TIPO','$OWNER','$CODEV','$MEMO','$person','$item_array_json','$fecha','$fecha_inicio',$existen_items_nocompletados, '$tipo_usuario',$id_lugar,'$fecha_primero')
-    ";
-
+            if($result1 instanceof mysqli_result && !$result1->fetch_assoc()) {
+              $fecha_inicio = $fecha;
+              $id_lugar = 1;
+            }
+            $insert = "insert into log_app_traspasos (U_n_documento,U_tipo_documento,appVersion,aux_array,despachador,CODI,RAMA,SUCURSAL,TIPO,OWNER,CODEV,MEMO,person,item_array,FechaRegistro,
+            Fecha_Inicio,existen_items_nocompletados,Tipo_usuario,Id_lugar,FechaRegistroSAP) VALUES ('$U_n_documento','$U_tipo_documento','$item_array_json_version','$item_array_json_version1',
+            '$despachador','$CODI','$RAMA','$SUCURSAL','$TIPO','$OWNER','$CODEV','$MEMO','$person','$item_array_json','$fecha','$fecha_inicio',$existen_items_nocompletados, '$tipo_usuario',$id_lugar,
+            '$fecha_primero') ";
             $idInsert = $conexionsap->query($insert);
-
             if (!$idInsert) {
-                throw new Exception("No se pudo registrar el log");
-            } else {
+              throw new Exception("Error al registrar la información en log_app_traspasos");
+            }
                 $sqlSP = "CALL sp_insertar_anio_gestion_rt('$U_n_documento', @resultado)";
-                $conexionsap->query($sqlSP);
+                if (!$conexionsap->query($sqlSP)) {
+                    throw new Exception("Error al ejecutar el procedimiento sp_insertar_anio_gestion_rt");
+                }
                 $res = $conexionsap->query("SELECT @resultado AS id_generado");
                 if ($res instanceof mysqli_result) {
-                    $row = $res->fetch_assoc();
-                    $id_generado = (int) $row['id_generado'];
-
+                   $row = $res->fetch_assoc();
+                   $id_generado = (int) $row['id_generado'];
+                } else {
+                   throw new Exception("No se pudo obtener el resultado del procedimiento");
                 }
-            }
-
-            // if (($existen_items_nocompletados === 0 && in_array($tipo_usuario, [2, 6]))   ||   ( in_array($lugar, [1, 3]) && in_array($tipo_usuario, [2, 6]))) {
-            //     $id_lugar = 3;
-            //     $conexionsap->query("update log_app_traspasos SET Fecha_Fin='$fecha' , Id_lugar=$id_lugar WHERE Id=$idInsert");
-            // }
-            if ((in_array($lugar, [1, 3]) && in_array($tipo_usuario, [2, 6]))) {
-                $id_lugar = 3;
-                $conexionsap->query("update log_app_traspasos SET Fecha_Fin='$fecha' , Id_lugar=$id_lugar WHERE Id=$idInsert");
-            }
-            echo json_encode([
-                "Estado" => 1,
-                "Mensaje" => "Registrado correctamente",
-                "Id" => $idInsert,
-            ]);
-            return;
+                if (in_array($lugar, [1, 3]) && in_array($tipo_usuario, [2, 6])) {
+                    $result1 = $conexionsap->query("CALL EXISTE_DOCUMENTO_TRASPASO1('$U_n_documento',$id_lugar,$idInsert)");
+                    if (!$result1) {
+                       throw new Exception("Error al ejecutar el procedimiento EXISTE_DOCUMENTO_TRASPASO1");
+                    }
+                }
+                echo json_encode([
+                  "Estado" => 1,
+                  "Mensaje" => "Registrado correctamente",
+                  "Id" => $idInsert,
+                ]);
+                return;
         } catch (Exception $e) {
-
             echo json_encode([
                 "Estado" => 0,
                 "Mensaje" => $e->getMessage(),
@@ -1675,7 +1618,6 @@ switch ($call) {
             return;
         }
 
-        break;
 
     case 'registrar_informacion_n_nota_porteria':
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
