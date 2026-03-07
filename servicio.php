@@ -1579,12 +1579,14 @@ switch ($call) {
             }
             $result1 = $conexionsap->query("CALL EXISTE_DOCUMENTO_TRASPASO('$U_n_documento')");
             if (!$result1) {
-                throw new Exception("Error CALL EXISTE_DOCUMENTO_TRASPASO");
-            }
-            if($result1 instanceof mysqli_result && !$result1->fetch_assoc()) {
-              $fecha_inicio = $fecha;
+              //  throw new Exception("Error CALL EXISTE_DOCUMENTO_TRASPASO");
+                 $fecha_inicio = $fecha;
               $id_lugar = 1;
             }
+            // if($result1 instanceof mysqli_result && !$result1->fetch_assoc()) {
+            //   $fecha_inicio = $fecha;
+            //   $id_lugar = 1;
+            // }
             $insert = "insert into log_app_traspasos (U_n_documento,U_tipo_documento,appVersion,aux_array,despachador,CODI,RAMA,SUCURSAL,TIPO,OWNER,CODEV,MEMO,person,item_array,FechaRegistro,
             Fecha_Inicio,existen_items_nocompletados,Tipo_usuario,Id_lugar,FechaRegistroSAP) VALUES ('$U_n_documento','$U_tipo_documento','$item_array_json_version','$item_array_json_version1',
             '$despachador','$CODI','$RAMA','$SUCURSAL','$TIPO','$OWNER','$CODEV','$MEMO','$person','$item_array_json','$fecha','$fecha_inicio',$existen_items_nocompletados, '$tipo_usuario',$id_lugar,
