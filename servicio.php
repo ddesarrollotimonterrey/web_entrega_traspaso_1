@@ -1596,12 +1596,11 @@ switch ($call) {
               throw new Exception("Error al registrar la información en log_app_traspasos");
             }
                 $sqlSP = "CALL sp_insertar_anio_gestion_rt('$U_n_documento', @resultado)";
+                $conexionsap->query($sqlSP);  // Ejecutar el procedimiento almacenado
                 $res = $conexionsap->query("SELECT @resultado AS id_generado");
                 if ($res instanceof mysqli_result) {
                    $row = $res->fetch_assoc();
                    $id_generado = (int) $row['id_generado'];
-                } else {
-                   throw new Exception("No se pudo obtener el resultado del procedimiento");
                 }
                 if (in_array($lugar, [1, 3]) && in_array($tipo_usuario, [2, 6])) {
                     $result1 = $conexionsap->query("CALL EXISTE_DOCUMENTO_TRASPASO1('$U_n_documento',$id_lugar,$idInsert)");
