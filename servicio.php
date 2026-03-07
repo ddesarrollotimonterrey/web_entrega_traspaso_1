@@ -2151,54 +2151,53 @@ switch ($call) {
     //     break;
 
     case 'actualizar_documento_pendientes_traspasos':
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {  throw new Exception("Método no permitido"); }
             $data = file_get_contents('php://input');
             $decodedObject = json_decode($data, true);
             $U_n_documento = $decodedObject['U_n_documento'] ?? null;
             $item_array = $decodedObject['item_array'] ?? null;
             $itemsModificados = $decodedObject['modificaciones'] ?? [];
-
             $valiar_completos_traspaso = $conexionsap->query("CALL `validar_completo_traspaso`('$U_n_documento')");
-            if (count($valiar_completos_traspaso) > 0) {
+            if ($valiar_completos_traspaso === false) {
+               throw new Exception("Error al ejecutar validar_completo_traspaso");
+            }
+            if (empty($valiar_completos_traspaso)) {
+               throw new Exception("Documento no encontrado");
+            }
                 $cant_body = $valiar_completos_traspaso[0]['Id'];
                 $items_arraybb = $valiar_completos_traspaso[0]['item_array'];
-
                 if (!empty($itemsModificados)) {
                     foreach ($item_array as &$item) {
-                        if (
-                            isset($item['CODIGO_ITEM']) &&
-                            in_array($item['CODIGO_ITEM'], $itemsModificados)
-                        ) {
-                            $item['U_fecha_registro_x_items_regularizado'] = $fecha;
+                        if (  isset($item['CODIGO_ITEM']) && in_array($item['CODIGO_ITEM'], $itemsModificados)) {
+                        $item['U_fecha_registro_x_items_regularizado'] = $fecha;
                         }
                     }
                     unset($item);
                 }
-
                 $array_log_actualizado = json_encode($item_array, JSON_UNESCAPED_UNICODE);
-
                 $dddd = $conexionsap->query("update log_app_traspasos SET Array_Log_anterior='$items_arraybb',item_array='$array_log_actualizado' , FechaModificacion='$fecha' WHERE Id = $cant_body");
-
-                //             if (count($dddd) > 0) {
-                $otroObjeto = [
+                if ($dddd === false) {
+                   throw new Exception("Error sin pa validar_completo_traspaso");
+                }
+                $result1 = $conexionsap->query("CALL EXISTE_DOCUMENTO_TRASPASO1('$U_n_documento',2,$cant_body)");
+                if ($result1 === false) {
+                    throw new Exception("Error al ejecutar el procedimiento EXISTE_DOCUMENTO_TRASPASO1");
+                }
+                echo json_encode([
                     "Id" => $dddd,
                     "Lista" => $array_log_actualizado,
                     "Estado" => 1,
                     "Mensaje" => "Actualizado la Información",
-                ];
-                // } else {
-                //     $otroObjeto = [
-                //         "Id"      => 0,
-                //         "Lista"   => [],
-                //         "Estado"  => 0,
-                //         "Mensaje" => "No se Actualizado la Información",
-                //     ];
-                // }
-                echo json_encode($otroObjeto);
+                ]);
                 return;
-            }
+        } catch (Exception $e) {
+            echo json_encode([
+                "Estado" => 0,
+                "Mensaje" => $e->getMessage(),
+            ]);
+            return;
         }
-        break;
 
     case 'lista_documento_pendientes_traspasos':
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
