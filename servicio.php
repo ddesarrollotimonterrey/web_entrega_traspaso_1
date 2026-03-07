@@ -2180,7 +2180,7 @@ switch ($call) {
                 if ($dddd === false) {
                    throw new Exception("Error sin pa validar_completo_traspaso");
                 }
-                $result1 = $conexionsap->query("CALL EXISTE_DOCUMENTO_TRASPASO1('$U_n_documento',2,$cant_body)");
+                $result1 = $conexionsap->query("CALL EXISTE_DOCUMENTO_TRASPASO2('$U_n_documento',2,$cant_body)");
                 if ($result1 === false) {
                     throw new Exception("Error al ejecutar el procedimiento EXISTE_DOCUMENTO_TRASPASO1");
                 }
