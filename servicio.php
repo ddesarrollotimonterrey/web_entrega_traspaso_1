@@ -1596,9 +1596,6 @@ switch ($call) {
               throw new Exception("Error al registrar la información en log_app_traspasos");
             }
                 $sqlSP = "CALL sp_insertar_anio_gestion_rt('$U_n_documento', @resultado)";
-                if (!$conexionsap->query($sqlSP)) {
-                    throw new Exception("Error al ejecutar el procedimiento sp_insertar_anio_gestion_rt");
-                }
                 $res = $conexionsap->query("SELECT @resultado AS id_generado");
                 if ($res instanceof mysqli_result) {
                    $row = $res->fetch_assoc();
