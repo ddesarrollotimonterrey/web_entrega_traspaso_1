@@ -228,8 +228,7 @@ switch ($call) {
 
     case 'SP_ENT_MAIN5_REP':
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-            $datat = $conexionsap->hanacall("\"SP_ENT_MAIN5_REP\"('ALM-V-07')");
+            $datat = $conexionsap->hanacall("\"SP_ENT_MAIN5_REP\"('ALM-V-09')");
             echo json_encode($datat);
         }
         break;
