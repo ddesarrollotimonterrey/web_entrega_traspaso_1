@@ -858,7 +858,7 @@ switch ($call) {
                             "Id" => 0,
                             "Lista" => json_encode($datat),
                             "Estado" => 0,
-                            "Mensaje" => "El documento no exite o no es un documento comercial !!! ".$alm,
+                            "Mensaje" => "El documento no corresponde al almacén de destino.",
                         ];
                     }
                 } else {
@@ -866,7 +866,7 @@ switch ($call) {
                         "Id" => 0,
                         "Lista" => json_encode($datat),
                         "Estado" => 0,
-                        "Mensaje" => "El valor no tiene exactamente 9 dígitos. 6 ",
+                        "Mensaje" => "El valor no tiene exactamente 9 dígitos.",
                     ];
                 }
             } else {
