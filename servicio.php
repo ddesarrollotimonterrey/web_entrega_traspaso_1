@@ -2228,6 +2228,15 @@ switch ($call) {
                     }
                     unset($item);
                 }
+
+foreach ($item_array as $it) {
+    if (!empty($it['NumeroDocumentoR'])) {
+        if (!isset($it['Comentario_id_tipoentrega']) || trim($it['Comentario_id_tipoentrega']) === '') {
+            throw new Exception(  "Debe ingresar un comentario en los ítems que tienen regularización." );
+        }
+    }
+}
+
                 $array_log_actualizado = json_encode($item_array, JSON_UNESCAPED_UNICODE);
                 $dddd = $conexionsap->query("update log_app_traspasos SET Array_Log_anterior='$items_arraybb',item_array='$array_log_actualizado' , FechaModificacion='$fecha' WHERE Id = $cant_body");
                 if ($dddd === false) {
