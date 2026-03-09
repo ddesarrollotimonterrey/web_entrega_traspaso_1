@@ -829,6 +829,60 @@ switch ($call) {
     break;
   
 
+  case 'find_almacen':
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = file_get_contents('php://input');
+            $decodedObject = json_decode($data, true);
+            $U_tipo_documento = $decodedObject['U_tipo_documento'];
+            $U_n_documento = $decodedObject['U_n_documento'];
+            $Almacen = $decodedObject['U_almacen'];
+            $otroObjeto = [];
+            $datat = [];
+            $alm = '';
+            if (is_array($Almacen)) {
+                $alm = implode(',', $Almacen); // 👈 convierte array a string
+            }
+            if (is_numeric($U_n_documento)) {
+                if (strlen($U_n_documento) === 9) {
+                    $datat = [];
+                    $datat = $conexionsap->hanacall("SP_ENT_MAIN$U_tipo_documento($U_n_documento)");
+                    if ((count($datat) > 0) && ($datat[0]['ALMACEN_D'] == $Almacen)) {
+                           $otroObjeto = [
+                            "Id" => 0,
+                            "Lista" => json_encode($datat),
+                            "Estado" => 1,
+                            "Mensaje" => "",
+                          ];
+                    } else {
+                        $otroObjeto = [
+                            "Id" => 0,
+                            "Lista" => json_encode($datat),
+                            "Estado" => 0,
+                            "Mensaje" => "El documento no exite o no es un documento comercial !!!",
+                        ];
+                    }
+                } else {
+                    $otroObjeto = [
+                        "Id" => 0,
+                        "Lista" => json_encode($datat),
+                        "Estado" => 0,
+                        "Mensaje" => "El valor no tiene exactamente 9 dígitos. 6 ",
+                    ];
+                }
+            } else {
+                $otroObjeto = [
+                    "Id" => 0,
+                    "Lista" => json_encode($datat),
+                    "Estado" => 0,
+                    "Mensaje" => "El valor no es un número 8.",
+                ];
+            }
+            echo json_encode($otroObjeto);
+            return;
+        }
+        break;
+
+
 
     case 'find':
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
