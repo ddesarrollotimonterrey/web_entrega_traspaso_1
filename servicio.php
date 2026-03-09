@@ -846,7 +846,7 @@ switch ($call) {
                 if (strlen($U_n_documento) === 9) {
                     $datat = [];
                     $datat = $conexionsap->hanacall("SP_ENT_MAIN$U_tipo_documento($U_n_documento)");
-                    if ((count($datat) > 0) && ($datat[0]['ALMACEN_D'] == $Almacen)) {
+                    if ((count($datat) > 0) && ($datat[0]['ALMACEN_D'] == $alm)) {
                            $otroObjeto = [
                             "Id" => 0,
                             "Lista" => json_encode($datat),
@@ -858,7 +858,7 @@ switch ($call) {
                             "Id" => 0,
                             "Lista" => json_encode($datat),
                             "Estado" => 0,
-                            "Mensaje" => "El documento no exite o no es un documento comercial !!! ".$Almacen,
+                            "Mensaje" => "El documento no exite o no es un documento comercial !!! ".$alm,
                         ];
                     }
                 } else {
