@@ -858,7 +858,7 @@ switch ($call) {
                             "Id" => 0,
                             "Lista" => json_encode($datat),
                             "Estado" => 0,
-                            "Mensaje" => "El documento no exite o no es un documento comercial !!!",
+                            "Mensaje" => "El documento no exite o no es un documento comercial !!! ".$datat[0]['ALMACEN_D'].' '.$Almacen,
                         ];
                     }
                 } else {
