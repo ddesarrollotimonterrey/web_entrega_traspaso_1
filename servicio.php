@@ -1661,6 +1661,14 @@ switch ($call) {
                        throw new Exception("Error al ejecutar el procedimiento EXISTE_DOCUMENTO_TRASPASO1");
                     }
                 }
+
+                if (in_array($tipo_usuario, [1])) {
+                    $result1d = $conexionsap->query("CALL EXISTE_DOCUMENTO_TRASPASO2('$U_n_documento',2,$idInsert)");
+                    if (!$result1d) {
+                       throw new Exception("Error al ejecutar el procedimiento EXISTE_DOCUMENTO_TRASPASO2");
+                    }
+                }
+
                 echo json_encode([
                   "Estado" => 1,
                   "Mensaje" => "Registrado correctamente",
